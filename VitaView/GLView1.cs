@@ -1,15 +1,12 @@
 using System;
 using OpenTK;
-using OpenTK.Graphics;
 using OpenTK.Graphics.ES11;
-using OpenTK.Platform;
 using OpenTK.Platform.Android;
 using Android.Content;
 using Android.Util;
 using Android.Graphics;
 using System.Net;
 using Android.Widget;
-using Android.App;
 
 namespace VitaView {
     class GLView1 : AndroidGameView {
@@ -44,25 +41,18 @@ namespace VitaView {
         }
 
         protected override void CreateFrameBuffer() {
-            // the default GraphicsMode that is set consists of (16, 16, 0, 0, 2, false)
             try {
                 Log.Verbose("GLCube", "Loading with default settings");
 
-                // if you don't call this, the context won't be created
                 base.CreateFrameBuffer();
                 return;
             }
             catch (Exception ex) {
                 Log.Verbose("GLCube", "{0}", ex);
             }
-
-            // this is a graphics setting that sets everything to the lowest mode possible so
-            // the device returns a reliable graphics setting.
             try {
                 Log.Verbose("GLCube", "Loading with custom Android settings (low mode)");
                 GraphicsMode = new AndroidGraphicsMode(0, 0, 0, 0, 0, false);
-
-                // if you don't call this, the context won't be created
                 base.CreateFrameBuffer();
                 return;
             }
@@ -72,7 +62,7 @@ namespace VitaView {
             throw new Exception("Can't load egl, aborting");
         }
 
-        // This gets called on each frame render
+
         protected override void OnRenderFrame(FrameEventArgs e) {
             base.OnRenderFrame(e);
             byte [] receivedData ;
@@ -81,7 +71,6 @@ namespace VitaView {
                 receivedData = clientSocket.Receive(ref ep);
             }catch (Exception ex) {
                 Log.Verbose("Exception: ", "{0}", ex);
-                //Toast.MakeText(this.Context, "Close", ToastLength.Long).Show();
             }
             
 
@@ -102,7 +91,6 @@ namespace VitaView {
             GL.LoadIdentity();
             GL.Ortho(-1.0f,1.0f, -1.5f, 1.5f, -1.0f, 1.0f);
             GL.MatrixMode(All.Modelview);
-            //GL.Rotate(3.0f, 0.0f, 0.0f, 1.0f);
 
             GL.ClearColor(0.5f, 0.5f, 0.5f, 1.0f);
             GL.Clear((uint)All.ColorBufferBit);
@@ -114,9 +102,6 @@ namespace VitaView {
             GL.VertexPointer(2, All.Float, 0, square_vertices);
             GL.TexCoordPointer(2, All.Float, 0, text_vertices);
             GL.EnableClientState(All.VertexArray);
-            //GL.ColorPointer(4, All.UnsignedByte, 0, square_colors);
-            //GL.EnableClientState(All.ColorArray);
-
             GL.DrawArrays(All.TriangleStrip, 0, 4);
             GL.Finish();
             GL.DisableClientState(All.VertexArray);
@@ -137,20 +122,10 @@ namespace VitaView {
                1.0f, -0.0f,
         };
 
-        byte [] square_colors = {
-            255, 255,   0, 255,
-            0,   255, 255, 255,
-            0,     0,    0,  0,
-            255,   0,  255, 255,
-        };
-
-
         int x = 0;
         private async void dataReceive() {
             clientSocket.Send(new byte [] { 1, 2, 3, 4, 5 }, 5);
-            //Toast.MakeText(this.Context, "Start", ToastLength.Long).Show();
             var receivedData = clientSocket.Receive(ref ep);
-            //Toast.MakeText(this.Context, "Pass", ToastLength.Long).Show();
             x++;
             while (true) {
                 await System.Threading.Tasks.Task.Delay(1);
@@ -163,7 +138,7 @@ namespace VitaView {
                         bitmap.Recycle();
                     }
                     catch (Exception ex) {
-                        Log.Verbose("asdjasd", "{0}", ex);
+                        Log.Verbose("Exception", "{0}", ex);
                     }
                 }
             }
@@ -172,8 +147,6 @@ namespace VitaView {
 
         void LoadTextureData(Context context, Bitmap b, int tex_id) {
             GL.BindTexture(All.Texture2D, tex_id);
-
-            // setup texture parameters
             GL.TexParameterx(All.Texture2D, All.TextureMagFilter, (int)All.Linear);
             GL.TexParameterx(All.Texture2D, All.TextureMinFilter, (int)All.Linear);
             GL.TexParameterx(All.Texture2D, All.TextureWrapS, (int)All.ClampToEdge);

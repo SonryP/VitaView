@@ -22,7 +22,6 @@ namespace VitaView {
         protected override void OnCreate(Bundle bundle) {
             base.OnCreate(bundle);
 
-            // Create our OpenGL view, and display it
             //view = new GLView1(this);
             //SetContentView(view);
             SetContentView(Resource.Layout.Start);
@@ -32,7 +31,7 @@ namespace VitaView {
             label1 = FindViewById<TextView>(Resource.Id.textView5);
             label1.Text = reFile();
             btn1.Click += delegate {
-                saveFl(text1.Text); //button.Text=string.Format("{0} clicks xD!", count++);
+                saveFl(text1.Text);
                 label1.Text = reFile();
             };
             btn2.Click += delegate {
