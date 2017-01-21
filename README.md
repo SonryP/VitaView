@@ -2,7 +2,7 @@
 Use your Android Phone as a Ps Vita Screen with RinCheat.
 ## Installation
 <br>1- Install Rinnegatamante RinCheat (With NetModule) on your Vita https://github.com/Rinnegatamante/rinCheat/
-<br>2- Install VitaView apk on Android phone or Tablet (When there is an apk).
+<br>2- Install VitaView apk on Android phone or Tablet.
 <br>3- Put your Vita's IP on the app and Save*
 
 <br>VitaView is in pre-stage, it have too many bugs.
@@ -20,6 +20,7 @@ TODO:
 
 ## History
 <br>Published on GitHub...
+<br>First Look Released
 
 ## Credits
 <br>-Thanks to Rinnegatamante for Creating RinCheat and Screen Stream Module!
