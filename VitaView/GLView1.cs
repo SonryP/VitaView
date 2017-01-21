@@ -11,7 +11,7 @@ using Android.Widget;
 namespace VitaView {
     class GLView1 : AndroidGameView {
         static string ip = "0";
-        System.Net.Sockets.UdpClient clientSocket; 
+        System.Net.Sockets.UdpClient clientSocket = new System.Net.Sockets.UdpClient(); 
         IPEndPoint ep;
         public GLView1(Context context) : base(context) {
         }
@@ -29,13 +29,10 @@ namespace VitaView {
             GL.Enable(All.Texture2D);
             GL.GenTextures(1, textureIds);
             try {
-                clientSocket = new System.Net.Sockets.UdpClient();
                 clientSocket.Connect(ep);
             }
             catch(Exception ex) {
                 Log.Verbose("Exception: ", "{0}", ex);
-                Toast.MakeText(this.Context, "No Connection", ToastLength.Long).Show();
-                Close();
             }
             
         }
@@ -123,27 +120,6 @@ namespace VitaView {
         };
 
         int x = 0;
-        private async void dataReceive() {
-            clientSocket.Send(new byte [] { 1, 2, 3, 4, 5 }, 5);
-            var receivedData = clientSocket.Receive(ref ep);
-            x++;
-            while (true) {
-                await System.Threading.Tasks.Task.Delay(1);
-
-                if (x >= 1) {
-                    try {
-                        receivedData = clientSocket.Receive(ref ep);
-                        Bitmap bitmap = BitmapFactory.DecodeByteArray(receivedData, 0, receivedData.Length);
-                        LoadTextureData(Context, bitmap, textureIds [0]);
-                        bitmap.Recycle();
-                    }
-                    catch (Exception ex) {
-                        Log.Verbose("Exception", "{0}", ex);
-                    }
-                }
-            }
-
-        }
 
         void LoadTextureData(Context context, Bitmap b, int tex_id) {
             GL.BindTexture(All.Texture2D, tex_id);
